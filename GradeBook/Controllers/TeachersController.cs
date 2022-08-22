@@ -16,7 +16,7 @@ namespace GradeBook.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        async Task<List<TeacherViewModel>> GetModelAsync()
         {
             var model = new List<TeacherViewModel>();
 
@@ -30,7 +30,24 @@ namespace GradeBook.Controllers
                 });
             }
 
-            return View(model);
+            return model;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            return View(await GetModelAsync());
+        }
+
+        public async Task<IActionResult> Remove(int id)
+        {
+            var t = await _context.Teachers.FirstOrDefaultAsync(x => x.Id == id);
+            if (t is not null)
+            {
+                _context.Teachers.Remove(t);
+                await _context.SaveChangesAsync();
+            }
+
+            return View("Index", await GetModelAsync());
         }
     }
 }

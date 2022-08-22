@@ -22,10 +22,10 @@ namespace GradeBook.Controllers
         }
 
 
-        public async Task<IActionResult> RemoveUser(int id)
+        public async Task<IActionResult> Remove(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
-            if(user is not null)
+            if(user is not null && user.Login != User.Identity.Name && user.Login != "admin")
             {
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();

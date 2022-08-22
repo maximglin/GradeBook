@@ -37,16 +37,28 @@
                     }
                 </td>
                 <td>
-                    <ul>
-                    @foreach(var p in user.Teachers)
+                    @if (user.IsAdmin)
                     {
-                        <li>
-                            @p.Name
-                        </li>
+                        <text>Все</text>
                     }
-                    </ul>
+                    else
+                    {
+                        <ul>
+                            @foreach (var p in user.Teachers)
+                            {
+                                <li>
+                                    @p.Name
+                                </li>
+                            }
+                        </ul>
+                    }
                 </td>
-                <td>@Html.ActionLink("Удалить", "RemoveUser", "Users", new{id = user.Id}, new {@class="btn btn-primary"})</td>
+                <td>
+                    @if (user.Login != User.Identity.Name && user.Login != "admin")
+                    {
+                        <text>@Html.ActionLink("Удалить", "Remove", "Users", new { id = user.Id }, new { @class = "btn btn-primary" })</text>
+                    }
+                </td>
             </tr>
         }
         
