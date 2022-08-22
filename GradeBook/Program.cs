@@ -25,6 +25,32 @@ namespace GradeBook
                     Password = "1234",
                     IsAdmin = false
                 });
+
+                var t = new Storage.Entities.Teacher() { Name = "Рожкова Оксана Александровна" };
+                context.Teachers.Add(t);
+
+                var g1 = new Storage.Entities.Group() { Name = "ИДБ-20-01" };
+                var g2 = new Storage.Entities.Group() { Name = "ИДБ-20-02" };
+                var g3 = new Storage.Entities.Group() { Name = "ИДБ-20-03" };
+                context.Groups.AddRange(new[] { g1, g2, g3 });
+
+                var bd = new Storage.Entities.Subject() { Name = "Базы данных" };
+                bd.Groups.AddRange(new[] { g1, g2, g3 });
+                context.Subjects.Add(bd);
+
+                context.TeacherSubjectGroupRelations.Add(new Storage.Entities.TeacherSubjectGroup()
+                {
+                    Teacher = t,
+                    Subject = bd,
+                    Group = g1
+                });
+                context.TeacherSubjectGroupRelations.Add(new Storage.Entities.TeacherSubjectGroup()
+                {
+                    Teacher = t,
+                    Subject = bd,
+                    Group = g2
+                });
+
                 context.SaveChanges();
             }
 

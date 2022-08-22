@@ -1,0 +1,42 @@
+﻿@model IEnumerable<GradeBook.Models.TeacherViewModel>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<h1>Пользователи</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Предметы и группы</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 0;
+        }
+        @foreach (var item in Model)
+        {
+            i++;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@item.Teacher.Name</td>
+                <td>
+                    <ul>
+                        @foreach(var sg in item.SubjectGroups)
+                        {
+                           <li>@sg.Subject.Name - @sg.Group.Name</li>
+                        }
+                    </ul>
+                </td>
+                <td>@Html.ActionLink("Удалить", "RemoveUser", "Users", new{id = item.Teacher.Id}, new {@class="btn btn-primary"})</td>
+            </tr>
+        }
+        
+
+    </tbody>
+</table>
+
