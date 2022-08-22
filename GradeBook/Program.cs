@@ -19,12 +19,14 @@ namespace GradeBook
                     Password = "a1234",
                     IsAdmin = true
                 });
-                context.Users.Add(new Storage.Entities.User()
+
+                var maximglin = new Storage.Entities.User()
                 {
                     Login = "maximglin",
                     Password = "1234",
                     IsAdmin = false
-                });
+                };
+                context.Users.Add(maximglin);
 
                 var t = new Storage.Entities.Teacher() { Name = "Рожкова Оксана Александровна" };
                 context.Teachers.Add(t);
@@ -50,6 +52,8 @@ namespace GradeBook
                     Subject = bd,
                     Group = g2
                 });
+
+                maximglin.Teachers.Add(t);
 
                 context.SaveChanges();
             }

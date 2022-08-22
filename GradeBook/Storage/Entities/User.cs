@@ -8,11 +8,14 @@ namespace GradeBook.Storage.Entities
     {
         public int Id { get; set; }
 
+
         public string Login { get; set; } = null!;
 
 
         public string Password { get; set; } = null!;
 
         public bool IsAdmin { get; set; } = false;
+
+        public virtual List<Teacher> Teachers { get; set; } = new();
     }
 }

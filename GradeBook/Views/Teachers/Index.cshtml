@@ -11,6 +11,7 @@
             <th scope="col">#</th>
             <th scope="col">Имя</th>
             <th scope="col">Предметы и группы</th>
+            <th scope="col">Пользователи, <br />которые могут ставить оценки<br />за данного преподавателя</th>
             <th scope="col">Действия</th>
         </tr>
     </thead>
@@ -29,6 +30,14 @@
                         @foreach(var sg in item.SubjectGroups)
                         {
                            <li>@sg.Subject.Name - @sg.Group.Name</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var u in item.Teacher.Users)
+                        {
+                            <li>@u.Login</li>
                         }
                     </ul>
                 </td>

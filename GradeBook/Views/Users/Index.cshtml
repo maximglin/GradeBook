@@ -12,6 +12,7 @@
             <th scope="col">Логин</th>
             <th scope="col">Пароль</th>
             <th scope="col">Права администратора</th>
+            <th scope="col">Преподаватели,<br />за которых можно проставлять <br />оценки</th>
             <th scope="col">Действия</th>
         </tr>
     </thead>
@@ -34,6 +35,16 @@
                     {
                         <text>Пользователь</text>
                     }
+                </td>
+                <td>
+                    <ul>
+                    @foreach(var p in user.Teachers)
+                    {
+                        <li>
+                            @p.Name
+                        </li>
+                    }
+                    </ul>
                 </td>
                 <td>@Html.ActionLink("Удалить", "RemoveUser", "Users", new{id = user.Id}, new {@class="btn btn-primary"})</td>
             </tr>

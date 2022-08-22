@@ -46,8 +46,9 @@ namespace GradeBook.Storage
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasIndex(u => u.Login);
-            
+            modelBuilder.Entity<User>().HasIndex(u => u.Login).IsUnique(true);
+            modelBuilder.Entity<TeacherSubjectGroup>().HasIndex(r => new { r.TeacherId, r.SubjectId, r.GroupId }).IsUnique(true);
+
             base.OnModelCreating(modelBuilder);
         }
 
