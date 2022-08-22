@@ -14,6 +14,9 @@ namespace GradeBook.Storage
         public DbSet<TeacherSubjectGroup> TeacherSubjectGroupRelations { get; set; }
     
         public DbSet<User> Users { get; set; }
+
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        public int SaveChanges();
     }
     public class GradeBookContext : DbContext, IGradeBookContext
     {
