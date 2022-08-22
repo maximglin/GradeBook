@@ -1,5 +1,7 @@
+using GradeBook.Models;
 using GradeBook.Storage;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GradeBook
 {
@@ -7,14 +9,43 @@ namespace GradeBook
     {
         public static void Main(string[] args)
         {
+            using (var context = new GradeBookContext())
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                context.Users.Add(new Storage.Entities.User()
+                {
+                    Login = "admin",
+                    Password = "kekopok1234",
+                    IsAdmin = true
+                });
+                context.Users.Add(new Storage.Entities.User()
+                {
+                    Login = "maximglin",
+                    Password = "1234",
+                    IsAdmin = false
+                });
+                context.SaveChanges();
+            }
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddTransient<IGradeBookContext, GradeBookContext>();
+            
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie();
+
+            builder.Services.AddSingleton<IAuthorizationHandler, AdminHandler>();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy =>
+                {
+                    policy.AddRequirements(new Models.AdminRequirement());
+                });
+            });
 
 
 

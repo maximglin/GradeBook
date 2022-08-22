@@ -27,15 +27,15 @@
                     <form asp-action="LogIn" asp-controller="Home"  asp-antiforgery="true">
                         <input type="text" asp-for="Login"/>
                         <input type="password" asp-for="Password" />
-                        <input type="submit" value="Sing In" />
+                        <input type="submit" value="Sing In" class="btn btn-primary" />
                     </form>
                 }
                 else
                 {
-                    <form asp-action="LogOut" asp-controller="Home"  asp-antiforgery="true">
-                            <p>Вы вошли как @User.Identity.Name</p>
-                            <button type="submit">Выход</button>
-                        </form>
+                    <div>
+                        Вы вошли как <b>@User.Identity.Name</b>
+                        @Html.ActionLink("Выход", "LogOut", "Home", null, new {@class = "btn btn-primary"})
+                    </div>
                 }
 
             </div>

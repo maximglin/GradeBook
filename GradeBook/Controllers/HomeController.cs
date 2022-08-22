@@ -25,25 +25,33 @@ namespace GradeBook.Controllers
 
         public async Task<IActionResult> LogIn(UserCredentials user)
         {
-            var referer = Request.Headers["referer"];
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, 
+            if(_context.Users.FirstOrDefault(
+                u => u.Login == user.Login && 
+                u.Password == user.Password) 
+                is not null)
+            {
+                await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
                 new System.Security.Claims.ClaimsPrincipal(new UserIdentity()
                 {
                     Name = user.Login,
                     IsAuthenticated = true
                 }
                 ));
-            return Redirect(referer);
-        }
-        public async Task<IActionResult> LogOut()
-        {
+            }
+
+            
             var referer = Request.Headers["referer"];
-            await HttpContext.SignOutAsync();
             return Redirect(referer);
         }
 
-        [Authorize]
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+
         public IActionResult Privacy()
         {
             return View();

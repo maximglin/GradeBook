@@ -29,8 +29,7 @@ namespace GradeBook.Storage
 
         public GradeBookContext()
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+
         }
 
 
@@ -44,7 +43,7 @@ namespace GradeBook.Storage
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<User>().HasIndex(u => u.Login);
             
             base.OnModelCreating(modelBuilder);
         }
