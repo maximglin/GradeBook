@@ -1,0 +1,6 @@
+﻿@model GradeBook.Models.UserCredentials
+<form asp-action="LogIn" asp-controller="Home" asp-antiforgery="true">
+    <input type="text" asp-for="Login"/>
+    <input type="password" asp-for="Password"/>
+    <input type="submit" value="Sing In" class="btn btn-primary" />
+</form>

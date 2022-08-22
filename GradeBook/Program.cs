@@ -16,7 +16,7 @@ namespace GradeBook
                 context.Users.Add(new Storage.Entities.User()
                 {
                     Login = "admin",
-                    Password = "kekopok1234",
+                    Password = "a1234",
                     IsAdmin = true
                 });
                 context.Users.Add(new Storage.Entities.User()
@@ -36,7 +36,11 @@ namespace GradeBook
             
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie();
+            .AddCookie(options =>
+            {
+                options.AccessDeniedPath = "/Home/Index";
+                options.LogoutPath = "/Home/Index";
+            });
 
             builder.Services.AddSingleton<IAuthorizationHandler, AdminHandler>();
             builder.Services.AddAuthorization(options =>

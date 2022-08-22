@@ -1,5 +1,4 @@
-﻿@model GradeBook.Models.UserCredentials
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,11 +23,7 @@
 
                 @if(User.Identity is null || User.Identity.IsAuthenticated == false)
                 {
-                    <form asp-action="LogIn" asp-controller="Home"  asp-antiforgery="true">
-                        <input type="text" asp-for="Login"/>
-                        <input type="password" asp-for="Password" />
-                        <input type="submit" value="Sing In" class="btn btn-primary" />
-                    </form>
+                    @await Component.InvokeAsync("Login")
                 }
                 else
                 {

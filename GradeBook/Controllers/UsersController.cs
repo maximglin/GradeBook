@@ -1,6 +1,7 @@
 ﻿using GradeBook.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GradeBook.Controllers
 {
@@ -15,11 +16,9 @@ namespace GradeBook.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
-
-            return View();
+            return View(await _context.Users.ToListAsync());
         }
     }
 }
