@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model GradeBook.Models.UserCredentials
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,8 +19,25 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @await Component.InvokeAsync("Menu");
+                    @await Component.InvokeAsync("Menu")
                 </div>
+
+                @if(User.Identity is null || User.Identity.IsAuthenticated == false)
+                {
+                    <form asp-action="LogIn" asp-controller="Home"  asp-antiforgery="true">
+                        <input type="text" asp-for="Login"/>
+                        <input type="password" asp-for="Password" />
+                        <input type="submit" value="Sing In" />
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="LogOut" asp-controller="Home"  asp-antiforgery="true">
+                            <p>Вы вошли как @User.Identity.Name</p>
+                            <button type="submit">Выход</button>
+                        </form>
+                }
+
             </div>
         </nav>
     </header>

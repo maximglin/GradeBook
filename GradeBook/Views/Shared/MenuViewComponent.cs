@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GradeBook.Storage;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GradeBook.Views.Shared
 {
     public class MenuViewComponent : ViewComponent
     {
+
         public IViewComponentResult Invoke()
         {
             var model = new List<Models.MenuItem>()

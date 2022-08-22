@@ -1,4 +1,5 @@
 using GradeBook.Storage;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace GradeBook
 {
@@ -11,6 +12,11 @@ namespace GradeBook
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddTransient<IGradeBookContext, GradeBookContext>();
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie();
+
+
 
             var app = builder.Build();
 
@@ -27,6 +33,7 @@ namespace GradeBook
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

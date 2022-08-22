@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using GradeBook.Storage;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace GradeBook.Controllers
 {
@@ -21,6 +23,27 @@ namespace GradeBook.Controllers
             return View();
         }
 
+        public async Task<IActionResult> LogIn(UserCredentials user)
+        {
+            var referer = Request.Headers["referer"];
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme, 
+                new System.Security.Claims.ClaimsPrincipal(new UserIdentity()
+                {
+                    Name = user.Login,
+                    IsAuthenticated = true
+                }
+                ));
+            return Redirect(referer);
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            var referer = Request.Headers["referer"];
+            await HttpContext.SignOutAsync();
+            return Redirect(referer);
+        }
+
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
