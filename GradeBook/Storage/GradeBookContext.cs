@@ -48,6 +48,12 @@ namespace GradeBook.Storage
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Login).IsUnique(true);
             modelBuilder.Entity<TeacherSubjectGroup>().HasIndex(r => new { r.TeacherId, r.SubjectId, r.GroupId }).IsUnique(true);
+            modelBuilder.Entity<Grade>().HasIndex(g => new
+            {
+                g.Type,
+                g.StudentId,
+                g.SubjectId
+            }).IsUnique(true);
 
             base.OnModelCreating(modelBuilder);
         }

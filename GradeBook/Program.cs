@@ -30,6 +30,8 @@ namespace GradeBook
 
                 var t = new Storage.Entities.Teacher() { Name = "Рожкова Оксана Александровна" };
                 context.Teachers.Add(t);
+                var t2 = new Storage.Entities.Teacher() { Name = "Гаврилов Андрей Геннадьевич" };
+                context.Teachers.Add(t2);
 
                 var g1 = new Storage.Entities.Group() { Name = "ИДБ-20-01" };
                 var g2 = new Storage.Entities.Group() { Name = "ИДБ-20-02" };
@@ -68,9 +70,22 @@ namespace GradeBook
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
+                //options.Events.OnRedirectToAccessDenied = (context) =>
+                //{
+                //    Console.WriteLine("Access denied");
+                //    return Task.CompletedTask;
+                //};
+                //options.Events.OnRedirectToLogin = (context) =>
+                //{
+                //    Console.WriteLine("Redir to Login");
+                //    return Task.CompletedTask;
+                //};
+                options.LoginPath = "/Home/Index";
                 options.AccessDeniedPath = "/Home/Index";
                 options.LogoutPath = "/Home/Index";
             });
+
+
 
             builder.Services.AddSingleton<IAuthorizationHandler, AdminHandler>();
             builder.Services.AddAuthorization(options =>

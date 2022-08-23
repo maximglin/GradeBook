@@ -51,6 +51,7 @@
                                 </li>
                             }
                         </ul>
+                        @Html.ActionLink("Редактировать", "EditTeachers", "Users", new {id = user.Id})
                     }
                 </td>
                 <td>
@@ -62,6 +63,9 @@
             </tr>
         }
         
+        <tr>
+            @await Html.PartialAsync("UserAddition", new GradeBook.Storage.Entities.User())    
+        </tr>
 
     </tbody>
 </table>

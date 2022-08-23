@@ -1,0 +1,12 @@
+﻿@model GradeBook.Storage.Entities.Teacher
+<form asp-controller="Teachers" asp-action="Add" id="formId">
+    <th scope="row"></th>
+    <td>@Html.EditorFor(u => u.Name)</td>
+    <td>
+        
+    </td>
+    <td></td>
+    <td>
+        <input type="submit" class="btn btn-primary" value="Добавить"/>
+    </td>
+</form>

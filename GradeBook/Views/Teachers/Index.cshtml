@@ -31,6 +31,7 @@
                         {
                            <li>@sg.Subject.Name - @sg.Group.Name</li>
                         }
+                        @Html.ActionLink("Редактировать", "EditSubjects", "Teachers", new{id = item.Teacher.Id})
                     </ul>
                 </td>
                 <td>
@@ -44,7 +45,9 @@
                 <td>@Html.ActionLink("Удалить", "Remove", "Teachers", new{id = item.Teacher.Id}, new {@class="btn btn-primary"})</td>
             </tr>
         }
-        
+        <tr>
+            @await Html.PartialAsync("TeacherAddition", new GradeBook.Storage.Entities.Teacher())
+        </tr>
 
     </tbody>
 </table>

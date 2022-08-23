@@ -1,0 +1,15 @@
+﻿@model GradeBook.Storage.Entities.User
+<form asp-controller="Users" asp-action="Add" id="formId">
+    <th scope="row"></th>
+    <td>@Html.EditorFor(u => u.Login)</td>
+    <td>@Html.EditorFor(u => u.Password)</td>
+    <td>
+        @Html.EditorFor(u => u.IsAdmin)
+    </td>
+    <td>
+        -
+    </td>
+    <td>
+        <input type="submit" class="btn btn-primary" value="Добавить"/>
+    </td>
+</form>

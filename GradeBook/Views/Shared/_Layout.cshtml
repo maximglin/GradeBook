@@ -23,7 +23,8 @@
 
                 @if(User.Identity is null || User.Identity.IsAuthenticated == false)
                 {
-                    @await Component.InvokeAsync("Login")
+                    @*@await Component.InvokeAsync("Login")*@
+                    @await Html.PartialAsync("Login", new GradeBook.Models.UserCredentials("", ""))
                 }
                 else
                 {

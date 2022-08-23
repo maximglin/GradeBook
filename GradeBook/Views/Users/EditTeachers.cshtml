@@ -1,0 +1,43 @@
+﻿@model EditUserTeachersViewModel
+@{
+    ViewData["Title"] = "Редактирование преподавателей у пользователя";
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Выбрать</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <form asp-action="EditTeachers" asp-controller="Users" method="post">
+        @Html.HiddenFor(m => m.UserId)
+        @for(int i = 0; i < Model.Teachers.Count; i++)
+        {
+            <tr>
+                <th scope="row">@(i+1)</th>
+                <td>@Model.Teachers[i].Teacher.Name</td>
+                <td>
+                    @Html.HiddenFor(m => m.Teachers[i].Teacher.Id)
+                    @Html.EditorFor(m => m.Teachers[i].Selected)
+                </td>
+            </tr>
+        }
+        <tr>
+           <th scope="row"></th>
+           <td></td>
+           <td>
+              <input type="submit" class="btn btn-primary" value="Сохранить"/>
+           </td>
+           </tr>
+        
+           
+        </form>
+        
+    </tbody>
+</table>

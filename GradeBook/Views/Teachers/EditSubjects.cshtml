@@ -1,0 +1,51 @@
+﻿@model GradeBook.Models.EditTeacherSubjectsViewModel
+@{
+    ViewData["Title"] = "Редактирование предметы у преподавателя";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Группы</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <form asp-action="EditSubjects" asp-controller="Teachers" method="post">
+            @Html.HiddenFor(m => m.Teacher.Id)
+            @foreach(var key in Model.Selected.Keys)
+            {
+            <tr>
+                <th scope="row"></th>
+                <td>
+                    @(Model.Selected[key].FirstOrDefault()?.Subject.Name ?? "")
+                </td>
+                <td>
+                    <ul>
+                        @for(int i = 0; i < Model.Selected[key].Count; i++)
+                        {
+                            <li>
+                                @Model.Selected[key][i].Group.Name
+                                @Html.EditorFor(m => Model.Selected[key][i].IsSelected)
+                                @Html.HiddenFor(m => Model.Selected[key][i].Group.Id)
+                                @Html.HiddenFor(m => Model.Selected[key][i].Subject.Id)
+                            </li>
+                        }
+                    </ul>
+                    
+                </td>
+            </tr>
+            }
+
+            <tr>
+                <th scope="row"></th>
+                <td></td>
+                <td><input type="submit" value="Сохранить" class="btn btn-primary"/></td>
+            </tr>
+        </form>
+        
+    </tbody>
+</table>

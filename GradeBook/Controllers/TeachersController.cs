@@ -1,5 +1,6 @@
 ﻿using GradeBook.Models;
 using GradeBook.Storage;
+using GradeBook.Storage.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace GradeBook.Controllers
         {
             var model = new List<TeacherViewModel>();
 
-            foreach (var t in (await _context.Teachers.ToListAsync()))
+            foreach (var t in (await _context.Teachers.OrderBy(tc => tc.Name).ToListAsync()))
             {
                 model.Add(new TeacherViewModel()
                 {
@@ -46,6 +47,94 @@ namespace GradeBook.Controllers
                 _context.Teachers.Remove(t);
                 await _context.SaveChangesAsync();
             }
+
+            return View("Index", await GetModelAsync());
+        }
+
+        public async Task<IActionResult> Add(Teacher t)
+        {
+            {
+                _context.Teachers.Add(t);
+                await _context.SaveChangesAsync();
+            }
+
+            ModelState.Clear();
+            return View("Index", await GetModelAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditSubjects(int id)
+        {
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Id == id);
+            if(teacher is not null)
+            {
+                var model = new EditTeacherSubjectsViewModel();
+
+                model.Teacher = teacher;
+                foreach(var s in await _context.Subjects.OrderBy(s => s.Name).ToListAsync())
+                {
+                    var list = await _context.Groups.Where(g => s.Groups.Contains(g))
+                        .Select(g => new SelectedSubjectGroupViewModel()
+                        {
+                            Subject = s,
+                            Group = g
+                        }).OrderBy(g => g.Group.Name).ToListAsync();
+
+                    foreach (var item in list)
+                        item.IsSelected = await _context.TeacherSubjectGroupRelations.AnyAsync(
+                            r => r.Teacher == teacher &&
+                            r.Subject == item.Subject &&
+                            r.Group == item.Group
+                            );
+
+                    model.Selected.Add(s.Id, list);
+                }
+
+
+                return View("EditSubjects", model);
+            }
+
+
+            return View("Index", await GetModelAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditSubjects(EditTeacherSubjectsViewModel model)
+        {
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(x => x.Id == model.Teacher.Id);
+
+            if(teacher is not null)
+            {
+                IEnumerable<SelectedSubjectGroupViewModel> rels = new List<SelectedSubjectGroupViewModel>();
+                foreach (var r in model.Selected.Values)
+                    rels = rels.Concat(r);
+
+
+
+                _context.TeacherSubjectGroupRelations.RemoveRange(
+                        _context.TeacherSubjectGroupRelations.Where(rel =>
+                            rel.Teacher == teacher
+                            )
+                        );
+                foreach (var r in rels.Where(r => r.IsSelected))
+                {
+                    var subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == r.Subject.Id);
+                    var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == r.Group.Id);
+
+
+                    if (subject is not null &&
+                        group is not null)
+                        _context.TeacherSubjectGroupRelations.Add(new TeacherSubjectGroup()
+                        {
+                            Teacher = teacher,
+                            Subject = subject,
+                            Group = group
+                        });
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
 
             return View("Index", await GetModelAsync());
         }
