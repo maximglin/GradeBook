@@ -70,16 +70,6 @@ namespace GradeBook
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                //options.Events.OnRedirectToAccessDenied = (context) =>
-                //{
-                //    Console.WriteLine("Access denied");
-                //    return Task.CompletedTask;
-                //};
-                //options.Events.OnRedirectToLogin = (context) =>
-                //{
-                //    Console.WriteLine("Redir to Login");
-                //    return Task.CompletedTask;
-                //};
                 options.LoginPath = "/Home/Index";
                 options.AccessDeniedPath = "/Home/Index";
                 options.LogoutPath = "/Home/Index";

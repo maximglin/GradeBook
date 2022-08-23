@@ -1,0 +1,43 @@
+﻿@model EditGroupsViewModel
+@{
+    ViewData["Title"] = "Редактирование преподавателей у пользователя";
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Выбрать группы</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <form asp-action="EditGroups" asp-controller="Subjects" method="post">
+            @Html.HiddenFor(m => m.Subject.Id)
+            @for (int i = 0; i < Model.Groups.Count; i++)
+            {
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@Model.Groups[i].Group.Name</td>
+                <td>
+                        @Html.HiddenFor(m => m.Groups[i].Group.Id)
+                        @Html.EditorFor(m => m.Groups[i].IsSelected)
+                </td>
+            </tr>
+            }
+        <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td>
+                <input type="submit" class="btn btn-primary" value="Сохранить" />
+            </td>
+        </tr>
+
+
+        </form>
+
+    </tbody>
+</table>

@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<GradeBook.Storage.Entities.Subject>
+
 @{
+    ViewData["Title"] = "Предметы";
 }
+
+<h1>Предметы</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Группы</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{int i = 0;}
+        @foreach(var s in Model)
+        {
+            i++;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@s.Name</td>
+                <td>
+                    <ul>
+                        @foreach(var g in s.Groups)
+                        {
+                            <li>
+                                @g.Name
+                            </li>
+                        }
+                    </ul>
+                    @Html.ActionLink("Редактировать", "EditGroups", "Subjects", new {id = s.Id})
+                </td>
+                <td>@Html.ActionLink("Удалить", "Remove", "Subjects", new {id = s.Id}, new {@class = "btn btn-primary"})</td>
+            </tr>
+        }
+        @await Html.PartialAsync("SubjectAddition", new GradeBook.Storage.Entities.Subject())
+    </tbody>
+</table>
