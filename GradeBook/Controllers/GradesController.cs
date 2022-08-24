@@ -129,7 +129,7 @@ namespace GradeBook.Controllers
                     ).FirstOrDefault()?.State ?? GradeState.Unlocked
             }).ToList();
 
-
+            model.IsAdminEditing = user.IsAdmin;
 
             return View("SetGrades", model);
         }
@@ -173,7 +173,7 @@ namespace GradeBook.Controllers
                 var grade_for_checkM1 = await _context.Grades.FirstOrDefaultAsync(g => g.StudentId == student.Id && g.SubjectId == model.Subject.Id && g.Type == GradeType.M1);
                 var grade_for_checkM2 = await _context.Grades.FirstOrDefaultAsync(g => g.StudentId == student.Id && g.SubjectId == model.Subject.Id && g.Type == GradeType.M2);
 
-                if (grade_for_checkM1 is null || grade_for_checkM1.State == GradeState.Unlocked)
+                if (grade_for_checkM1 is null || grade_for_checkM1.State == GradeState.Unlocked || user.IsAdmin)
                 {
                     if (grade.M1 is not null)
                     {
@@ -187,6 +187,10 @@ namespace GradeBook.Controllers
                             Value = grade.M1.Value,
                             State = GradeState.Unlocked
                         });
+                        if (user.IsAdmin && (grade_for_checkM1 is not null) && (grade_for_checkM1.State != GradeState.Unlocked))
+                        {
+                            grades.Last().State = grade_for_checkM1.State;
+                        }
                     }
                     else
                     {
@@ -201,7 +205,7 @@ namespace GradeBook.Controllers
                         });
                     }
                 }
-                if (grade_for_checkM2 is null || grade_for_checkM2.State == GradeState.Unlocked)
+                if (grade_for_checkM2 is null || grade_for_checkM2.State == GradeState.Unlocked || user.IsAdmin)
                 {
                     if (grade.M2 is not null)
                     {
@@ -215,6 +219,10 @@ namespace GradeBook.Controllers
                             Value = grade.M2.Value,
                             State = GradeState.Unlocked
                         });
+                        if(user.IsAdmin && (grade_for_checkM2 is not null) && (grade_for_checkM2.State != GradeState.Unlocked))
+                        {
+                            grades.Last().State = grade_for_checkM2.State;
+                        }
                     }
                     else
                     {

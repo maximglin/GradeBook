@@ -10,6 +10,8 @@ namespace GradeBook.Models
 
         public List<GradeViewModel> Grades { get; set; } = new();
 
+        public bool IsAdminEditing { get; set; } = false;
+
     }
 
 

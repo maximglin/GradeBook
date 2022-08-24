@@ -40,13 +40,25 @@
                         }
                         else if(item.M1State == GradeBook.Storage.Entities.GradeState.Set)
                         {
-                            <text><p style="background: yellow">@item.M1.Value</p></text>
-                            @*@Html.HiddenFor(m => m.Grades[i].M1)*@
+                            if(!Model.IsAdminEditing)
+                            {
+                                <text><p style="background: yellow">@item.M1.Value</p></text>
+                            }
+                            else
+                            {
+                                <text><input type="number" min="25" max="100" asp-for="Grades[i].M1" value="@item.M1.Value" style="background: yellow"/></text>
+                            }
                         }
                         else
                         {
-                            <text><p style="background: red">@item.M1.Value</p></text>
-                            @*@Html.HiddenFor(m => m.Grades[i].M1)*@
+                            if(!Model.IsAdminEditing)
+                            {
+                                <text><p style="background: red">@item.M1.Value</p></text>
+                            }
+                            else
+                            {
+                                <text><input type="number" min="25" max="100" asp-for="Grades[i].M1" value="@item.M1.Value" style="background: red"/></text>
+                            }
                         }
                     }
                     else
@@ -62,13 +74,25 @@
                         }
                         else if(item.M2State == GradeBook.Storage.Entities.GradeState.Set)
                         {
-                            <text><p style="background: yellow">@item.M2.Value</p></text>
-                            @*@Html.HiddenFor(m => m.Grades[i].M2)*@
+                            if(!Model.IsAdminEditing)
+                            {
+                                <text><p style="background: yellow">@item.M2.Value</p></text>
+                            }
+                            else
+                            {
+                                <text><input type="number" min="25" max="100" asp-for="Grades[i].M2" value="@item.M2.Value" style="background: yellow"/></text>
+                            }
                         }
                         else
                         {
-                            <text><p style="background: red">@item.M2.Value</p></text>
-                            @*@Html.HiddenFor(m => m.Grades[i].M2)*@
+                            if(!Model.IsAdminEditing)
+                            {
+                                <text><p style="background: red">@item.M2.Value</p></text>
+                            }
+                            else
+                            {
+                                <text><input type="number" min="25" max="100" asp-for="Grades[i].M2" value="@item.M2.Value" style="background: red"/></text>
+                            }
                         }
                     }
                     else
