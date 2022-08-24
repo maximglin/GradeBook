@@ -5,6 +5,14 @@
         M1,
         M2
     }
+    public enum GradeState
+    {
+        Unlocked,
+        Set,
+        NeedsApproval
+    }
+
+
     public class Grade
     {
         public int Id { get; set; }
@@ -18,6 +26,6 @@
         public int SubjectId { get; set; }
         public virtual Subject Subject { get; set; } = null!;
 
-        public bool IsLocked { get; set; } = false;
+        public GradeState State { get; set; } = GradeState.Unlocked;
     }
 }

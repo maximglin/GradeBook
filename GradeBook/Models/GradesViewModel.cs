@@ -2,18 +2,25 @@
 
 namespace GradeBook.Models
 {
-    public class GradesIndexViewModel
-    {
-        
-    }
-
 
     public class GradesViewModel
     {
         public Subject Subject { get; set; }
         public Group Group { get; set; }
 
-        public List<Grade> Grades { get; set; } = new();
+        public List<GradeViewModel> Grades { get; set; } = new();
 
+    }
+
+
+    
+    public class GradeViewModel
+    {
+        public Student Student { get; set; }
+        public int? M1 { get; set; }
+        public int? M2 { get; set; }
+
+        public GradeState M1State { get; set; }
+        public GradeState M2State { get; set; }
     }
 }

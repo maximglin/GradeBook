@@ -1,4 +1,5 @@
-﻿using GradeBook.Storage;
+﻿using GradeBook.Models;
+using GradeBook.Storage;
 using GradeBook.Storage.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +64,74 @@ namespace GradeBook.Controllers
 
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SetGrades(int subjectId, int groupId)
+        {
+            if (User.Identity is null) return RedirectToAction("Index", "Home");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+
+            if (user is null) return RedirectToAction("Index", "Home");
+
+
+            if (!user.IsAdmin)
+            {
+                var rels = await _context.TeacherSubjectGroupRelations
+                .OrderBy(r => r.Subject.Name)
+                .ThenBy(r => r.Group.Name)
+                .ToListAsync();
+
+                var old = rels;
+                rels = rels.Where(r => user.Teachers.Contains(r.Teacher)).ToList();
+
+                if(!rels.Any(r => r.SubjectId == subjectId && r.GroupId == groupId))
+                    return RedirectToAction("Index");
+            }
+
+
+            var subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == subjectId);
+            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
+
+            if(subject is null || group is null) return RedirectToAction("Index");
+
+
+            var model = new GradesViewModel();
+
+            model.Subject = subject;
+            model.Group = group;
+            model.Grades = group.Students.Select(s =>
+            new GradeViewModel()
+            {
+                Student = s,
+                M1 = _context.Grades.Where(
+                    g => g.SubjectId == subject.Id &&
+                    g.StudentId == s.Id &&
+                    g.Type == GradeType.M1
+                    ).FirstOrDefault()?.Value ?? null,
+                M2 = _context.Grades.Where(
+                    g => g.SubjectId == subject.Id &&
+                    g.StudentId == s.Id &&
+                    g.Type == GradeType.M2
+                    ).FirstOrDefault()?.Value ?? null,
+
+                M1State = _context.Grades.Where(
+                    g => g.SubjectId == subject.Id &&
+                    g.StudentId == s.Id &&
+                    g.Type == GradeType.M1
+                    ).FirstOrDefault()?.State ?? GradeState.Unlocked,
+
+                M2State = _context.Grades.Where(
+                    g => g.SubjectId == subject.Id &&
+                    g.StudentId == s.Id &&
+                    g.Type == GradeType.M2
+                    ).FirstOrDefault()?.State ?? GradeState.Unlocked
+            }).ToList();
+
+
+
+            return View("SetGrades", model);
         }
     }
 }

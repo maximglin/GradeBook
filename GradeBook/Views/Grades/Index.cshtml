@@ -24,14 +24,18 @@
                 <td rowspan="@Model[subject].Groups.Count">@Model[subject].Name</td>
                 <td>@Model[subject].Groups[0].Group.Name</td>
                 <td>@Model[subject].Groups[0].Teacher</td>
-                <td>Проставить</td>
+                <td>@Html.ActionLink("Проставить", "SetGrades", "Grades", 
+                    new {subjectId = subject, groupId = Model[subject].Groups[0].Group.Id},
+                    new {@class = "btn btn-primary"})</td>
             </tr>
             @for(int i = 1; i < Model[subject].Groups.Count; i++)
             {
                 <tr>
                     <td>@Model[subject].Groups[i].Group.Name</td>
                     <td>@Model[subject].Groups[i].Teacher</td>
-                    <td>Проставить</td>
+                    <td>@Html.ActionLink("Проставить", "SetGrades", "Grades", 
+                    new {subjectId = subject, groupId = Model[subject].Groups[i].Group.Id},
+                    new {@class = "btn btn-primary"})</td>
                 </tr>
             }
         }

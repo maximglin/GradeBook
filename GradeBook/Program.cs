@@ -57,6 +57,59 @@ namespace GradeBook
 
                 maximglin.Teachers.Add(t);
 
+
+                var st1 = new Storage.Entities.Student()
+                {
+                    Name = "Глинкин М.О.",
+                    Group = g1
+                };
+                var st2 = new Storage.Entities.Student()
+                {
+                    Name = "Дудар С.А.",
+                    Group = g1
+                };
+                var st3 = new Storage.Entities.Student()
+                {
+                    Name = "Герасименко С.А.",
+                    Group = g2
+                };
+                var st4 = new Storage.Entities.Student()
+                {
+                    Name = "Помазан Н.А.",
+                    Group = g2
+                };
+                context.Students.AddRange(st1, st2, st3, st4);
+
+                context.Grades.Add(new Storage.Entities.Grade()
+                {
+                    Student = st1,
+                    Subject = bd,
+                    Type = Storage.Entities.GradeType.M1,
+                    State = Storage.Entities.GradeState.Set,
+                    Value = 45
+                });
+                context.Grades.Add(new Storage.Entities.Grade()
+                {
+                    Student = st2,
+                    Subject = bd,
+                    Type = Storage.Entities.GradeType.M2,
+                    Value = 48
+                });
+                context.Grades.Add(new Storage.Entities.Grade()
+                {
+                    Student = st3,
+                    Subject = bd,
+                    Type = Storage.Entities.GradeType.M1,
+                    Value = 44
+                });
+                context.Grades.Add(new Storage.Entities.Grade()
+                {
+                    Student = st4,
+                    Subject = bd,
+                    Type = Storage.Entities.GradeType.M1,
+                    Value = 42
+                });
+
                 context.SaveChanges();
             }
 

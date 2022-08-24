@@ -71,13 +71,14 @@ namespace GradeBook.Controllers
             var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == model.Group.Id);
             if (group is not null)
             {
-                var studentNames = model.Students?.Split("\r\n") ?? Array.Empty<string>();
-                group.Students.Clear();
-                group.Students = studentNames.Where(n => n.Length > 0).Select(n => new Student()
+                var studentNames = (model.Students?.Split("\r\n") ?? Array.Empty<string>()).AsEnumerable();
+                //group.Students.Clear();
+                studentNames = studentNames.Where(s => !group.Students.Any(x => x.Name == s));
+                group.Students.AddRange(studentNames.Where(n => n.Length > 0).Select(n => new Student()
                 {
                     Group = group,
                     Name = n
-                }).ToList();
+                }));
                 await _context.SaveChangesAsync();
             }
 

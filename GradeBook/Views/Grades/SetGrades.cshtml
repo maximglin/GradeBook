@@ -7,4 +7,64 @@
 <h2>Проставление оценок группе @Model.Group.Name</h2>
 <h2>по предмету @Model.Subject.Name</h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Студент</th>
+            <th scope="col">М1</th>
+            <th scope="col">М2</th>
+        </tr>
+    </thead>
+    <tbody>
 
+        @for(int i = 0; i < Model.Grades.Count; i++)
+        {
+            var item = Model.Grades[i];
+            <tr>
+                <th scope="row">@(i+1)</th>
+                <td>@item.Student.Name</td>
+                <td>@if(item.M1 is not null)
+                    {
+                        @if(item.M1State == GradeBook.Storage.Entities.GradeState.Unlocked)
+                        {
+                            <text><input type="number" min="25" max="100" asp-for="Grades[i].M1" value="@item.M1.Value"/></text>
+                        }
+                        else if(item.M1State == GradeBook.Storage.Entities.GradeState.Set)
+                        {
+                            <text><p style="background: yellow">@item.M1.Value</p></text>
+                        }
+                        else
+                        {
+                            <text><p style="background: red">@item.M1.Value</p></text>
+                        }
+                    }
+                    else
+                    {
+                        <text><input type="number" min="25" max="100" asp-for="Grades[i].M1" /></text>
+                    }
+                </td>
+                <td>@if(item.M2 is not null)
+                    {
+                        @if(item.M2State == GradeBook.Storage.Entities.GradeState.Unlocked)
+                        {
+                            <text><input type="number" min="25" max="100" asp-for="Grades[i].M2" value="@item.M2.Value"/></text>
+                        }
+                        else if(item.M2State == GradeBook.Storage.Entities.GradeState.Set)
+                        {
+                            <text><p style="background: yellow">@item.M2.Value</p></text>
+                        }
+                        else
+                        {
+                            <text><p style="background: red">@item.M2.Value</p></text>
+                        }
+                    }
+                    else
+                    {
+                        <text><input type="number" min="25" max="100" asp-for="Grades[i].M2" /></text>
+                    }</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
