@@ -173,7 +173,8 @@ namespace GradeBook.Controllers
                 var grade_for_checkM1 = await _context.Grades.FirstOrDefaultAsync(g => g.StudentId == student.Id && g.SubjectId == model.Subject.Id && g.Type == GradeType.M1);
                 var grade_for_checkM2 = await _context.Grades.FirstOrDefaultAsync(g => g.StudentId == student.Id && g.SubjectId == model.Subject.Id && g.Type == GradeType.M2);
 
-                if (grade_for_checkM1 is null || grade_for_checkM1.State == GradeState.Unlocked || user.IsAdmin)
+                if ((grade_for_checkM1 is null || grade_for_checkM1.State == GradeState.Unlocked || user.IsAdmin) 
+                    && (grade.M1 is null || (grade.M1.Value >= 25 && grade.M1.Value <= 100)))
                 {
                     if (grade.M1 is not null)
                     {
@@ -205,7 +206,8 @@ namespace GradeBook.Controllers
                         });
                     }
                 }
-                if (grade_for_checkM2 is null || grade_for_checkM2.State == GradeState.Unlocked || user.IsAdmin)
+                if ((grade_for_checkM2 is null || grade_for_checkM2.State == GradeState.Unlocked || user.IsAdmin)
+                    && (grade.M2 is null || (grade.M2.Value >= 25 && grade.M2.Value <= 100)))
                 {
                     if (grade.M2 is not null)
                     {
