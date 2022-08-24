@@ -5,9 +5,35 @@
 
 <h1>Редактирование студентов в группе @Model.Group.Name</h1>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 0;
+        }
+        @foreach (var student in Model.Students)
+        {
+            i++;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@student.Name</td>
+                <td>@Html.ActionLink("Удалить", "RemoveStudent", "Groups", new {id = student.Id}, new {@class = "btn btn-primary"})</td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
 <form asp-action="EditStudents" asp-controller="Groups" method="post">
     <p>Вставьте список студентов по 1 на строку:</p>
     @Html.HiddenFor(m => m.Group.Id)
-    <textarea asp-for="Students" style="width: 500px; height: 700px; resize: both"></textarea>
-    <input type="submit" value="Сохранить" class="btn btn-primary" style="position: absolute; margin-left: 25px;">
+    <textarea asp-for="StudentsToAdd" style="width: 500px; height: 700px; resize: both"></textarea>
+    <input type="submit" value="Добавить" class="btn btn-primary" style="position: absolute; margin-left: 25px;">
 </form>

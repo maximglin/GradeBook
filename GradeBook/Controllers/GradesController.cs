@@ -101,7 +101,7 @@ namespace GradeBook.Controllers
 
             model.Subject = subject;
             model.Group = group;
-            model.Grades = group.Students.Select(s =>
+            model.Grades = group.Students.OrderBy(s => s.Name).Select(s =>
             new GradeViewModel()
             {
                 Student = s,
