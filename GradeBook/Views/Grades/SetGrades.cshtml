@@ -7,6 +7,8 @@
 <h2>Проставление оценок группе @Model.Group.Name</h2>
 <h2>по предмету @Model.Subject.Name</h2>
 
+<div style="height: 1em; width: 1em; background-color: yellow; display: inline-block;"></div><span> - Переставлено в деканат, изменять нельзя</span><br />
+<div style="height: 1em; width: 1em; background-color: red; display: inline-block;"></div><span> - Требуется подтверждение на кафедре, изменять нельзя</span><br />
 <table class="table">
     <thead>
         <tr>
@@ -17,13 +19,19 @@
         </tr>
     </thead>
     <tbody>
-
+        <form asp-controller="Grades" asp-action="SetGrades" method="post">
+        @Html.HiddenFor(m => m.Subject.Id)
+        @Html.HiddenFor(m => m.Group.Id)
         @for(int i = 0; i < Model.Grades.Count; i++)
         {
             var item = Model.Grades[i];
+            
             <tr>
                 <th scope="row">@(i+1)</th>
-                <td>@item.Student.Name</td>
+                <td>
+                    @item.Student.Name
+                    @Html.HiddenFor(m => m.Grades[i].Student.Id)
+                </td>
                 <td>@if(item.M1 is not null)
                     {
                         @if(item.M1State == GradeBook.Storage.Entities.GradeState.Unlocked)
@@ -33,10 +41,12 @@
                         else if(item.M1State == GradeBook.Storage.Entities.GradeState.Set)
                         {
                             <text><p style="background: yellow">@item.M1.Value</p></text>
+                            @*@Html.HiddenFor(m => m.Grades[i].M1)*@
                         }
                         else
                         {
                             <text><p style="background: red">@item.M1.Value</p></text>
+                            @*@Html.HiddenFor(m => m.Grades[i].M1)*@
                         }
                     }
                     else
@@ -53,10 +63,12 @@
                         else if(item.M2State == GradeBook.Storage.Entities.GradeState.Set)
                         {
                             <text><p style="background: yellow">@item.M2.Value</p></text>
+                            @*@Html.HiddenFor(m => m.Grades[i].M2)*@
                         }
                         else
                         {
                             <text><p style="background: red">@item.M2.Value</p></text>
+                            @*@Html.HiddenFor(m => m.Grades[i].M2)*@
                         }
                     }
                     else
@@ -64,7 +76,9 @@
                         <text><input type="number" min="25" max="100" asp-for="Grades[i].M2" /></text>
                     }</td>
             </tr>
+            
         }
-
+            <input type="submit" value="Сохранить" class="btn btn-primary" style="margin-top: 20px"/>
+            </form>
     </tbody>
 </table>

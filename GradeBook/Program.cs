@@ -107,6 +107,7 @@ namespace GradeBook
                     Student = st4,
                     Subject = bd,
                     Type = Storage.Entities.GradeType.M1,
+                    State = Storage.Entities.GradeState.NeedsApproval,
                     Value = 42
                 });
 

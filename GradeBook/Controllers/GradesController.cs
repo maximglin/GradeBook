@@ -133,5 +133,131 @@ namespace GradeBook.Controllers
 
             return View("SetGrades", model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SetGrades(GradesViewModel model)
+        {
+            if (User.Identity is null) return RedirectToAction("Index", "Home");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+
+            if (user is null) return RedirectToAction("Index", "Home");
+
+            var subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == model.Subject.Id);
+            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == model.Group.Id);
+            if(subject is null || group is null) return RedirectToAction("Index");
+
+            if (!user.IsAdmin)
+            {
+                var rels = await _context.TeacherSubjectGroupRelations
+                .OrderBy(r => r.Subject.Name)
+                .ThenBy(r => r.Group.Name)
+                .ToListAsync();
+
+                var old = rels;
+                rels = rels.Where(r => user.Teachers.Contains(r.Teacher)).ToList();
+
+                if (!rels.Any(r => r.SubjectId == subject.Id && r.GroupId == group.Id))
+                    return RedirectToAction("Index");
+            }
+
+            var grades = new List<Grade>();
+            var grades_to_remove = new List<Grade>();
+            foreach(var grade in model.Grades)
+            {
+
+                var student = await _context.Students.FirstOrDefaultAsync(s => s.Id == grade.Student.Id);
+                
+                if (student is null || subject is null) continue;
+
+                var grade_for_checkM1 = await _context.Grades.FirstOrDefaultAsync(g => g.StudentId == student.Id && g.SubjectId == model.Subject.Id && g.Type == GradeType.M1);
+                var grade_for_checkM2 = await _context.Grades.FirstOrDefaultAsync(g => g.StudentId == student.Id && g.SubjectId == model.Subject.Id && g.Type == GradeType.M2);
+
+                if (grade_for_checkM1 is null || grade_for_checkM1.State == GradeState.Unlocked)
+                {
+                    if (grade.M1 is not null)
+                    {
+                        grades.Add(new Grade()
+                        {
+                            StudentId = student.Id,
+                            SubjectId = subject.Id,
+                            Student = student,
+                            Subject = subject,
+                            Type = GradeType.M1,
+                            Value = grade.M1.Value,
+                            State = GradeState.Unlocked
+                        });
+                    }
+                    else
+                    {
+                        grades_to_remove.Add(new Grade()
+                        {
+                            StudentId = student.Id,
+                            SubjectId = subject.Id,
+                            Student = student,
+                            Subject = subject,
+                            Type = GradeType.M1,
+                            State = GradeState.Unlocked
+                        });
+                    }
+                }
+                if (grade_for_checkM2 is null || grade_for_checkM2.State == GradeState.Unlocked)
+                {
+                    if (grade.M2 is not null)
+                    {
+                        grades.Add(new Grade()
+                        {
+                            StudentId = student.Id,
+                            SubjectId = subject.Id,
+                            Student = student,
+                            Subject = subject,
+                            Type = GradeType.M2,
+                            Value = grade.M2.Value,
+                            State = GradeState.Unlocked
+                        });
+                    }
+                    else
+                    {
+                        grades_to_remove.Add(new Grade()
+                        {
+                            StudentId = student.Id,
+                            SubjectId = subject.Id,
+                            Student = student,
+                            Subject = subject,
+                            Type = GradeType.M2,
+                            State = GradeState.Unlocked
+                        });
+                    }
+                }
+            }
+
+            foreach(var grade in grades_to_remove)
+            {
+                var to_remove = await _context.Grades.FirstOrDefaultAsync(g =>
+                    g.SubjectId == grade.SubjectId &&
+                    g.StudentId == grade.StudentId &&
+                    g.Type == grade.Type
+                    );
+                if (to_remove is not null)
+                    _context.Grades.Remove(to_remove);
+            }
+
+            foreach(var grade in grades)
+            {
+                var to_edit = await _context.Grades.FirstOrDefaultAsync(g =>
+                    g.SubjectId == grade.SubjectId &&
+                    g.StudentId == grade.StudentId &&
+                    g.Type      == grade.Type
+                    );
+                if (to_edit is not null)
+                    to_edit.Value = grade.Value;
+                else
+                    _context.Grades.Add(grade);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
     }
 }
