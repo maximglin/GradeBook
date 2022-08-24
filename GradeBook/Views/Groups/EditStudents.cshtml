@@ -1,0 +1,14 @@
+﻿@model GradeBook.Models.EditStudentsViewModel
+@{
+    ViewData["Title"] = "Редактирование студентов в группе";
+}
+
+<h1>Редактирование студентов в группе</h1>
+
+<form asp-action="EditStudents" asp-controller="Groups" method="post">
+    <p>Вставьте список студентов по 1 на строку:</p>
+    @Html.HiddenFor(m => m.Group.Id)
+    <textarea asp-for="Students" style="width: 500px; height: 700px; resize: both"></textarea>
+    <br />
+    <input type="submit" value="Сохранить" class="btn btn-primary" />
+</form>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<GradeBook.Storage.Entities.Group>
+@{
+    ViewData["Title"] = "Группы";
+}
+
+<h1>Пользователи</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Студенты</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 0;
+        }
+        @foreach (var group in Model)
+        {
+            i++;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@group.Name</td>
+                <td>
+                    (Студентов - @group.Students.Count)
+                    @Html.ActionLink("Редактировать", "EditStudents", "Groups", new {id = group.Id})
+                    </td>
+                <td>
+                    @Html.ActionLink("Удалить", "Remove", "Groups", new { id = group.Id }, new { @class = "btn btn-primary" })
+                </td>
+            </tr>
+        }
+        
+        <tr>
+            @await Html.PartialAsync("GroupAddition", new GradeBook.Storage.Entities.Group())    
+        </tr>
+
+    </tbody>
+</table>
+

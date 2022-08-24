@@ -38,7 +38,7 @@ namespace GradeBook.Controllers
             }
 
             ModelState.Clear();
-            return View("Index", await GetModel());
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> Add(User user)
         {
@@ -51,7 +51,7 @@ namespace GradeBook.Controllers
             }
 
             ModelState.Clear();
-            return View("Index", await GetModel());
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -72,7 +72,7 @@ namespace GradeBook.Controllers
                 });
             }
             else
-                return View("Index", await GetModel());
+                return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -88,8 +88,8 @@ namespace GradeBook.Controllers
                 user.Teachers.AddRange(_context.Teachers.Where(t => teachers.Contains(t.Id)));
                 await _context.SaveChangesAsync();
             }
-            
-            return View("Index", await GetModel());
+
+            return RedirectToAction("Index");
         }
 
     }

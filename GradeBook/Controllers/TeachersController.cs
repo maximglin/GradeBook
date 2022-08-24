@@ -48,7 +48,7 @@ namespace GradeBook.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View("Index", await GetModelAsync());
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Add(Teacher t)
@@ -59,7 +59,7 @@ namespace GradeBook.Controllers
             }
 
             ModelState.Clear();
-            return View("Index", await GetModelAsync());
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -95,7 +95,7 @@ namespace GradeBook.Controllers
             }
 
 
-            return View("Index", await GetModelAsync());
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -136,7 +136,7 @@ namespace GradeBook.Controllers
             }
 
 
-            return View("Index", await GetModelAsync());
+            return RedirectToAction("Index");
         }
     }
 }

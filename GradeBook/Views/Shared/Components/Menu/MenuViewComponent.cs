@@ -36,7 +36,7 @@ namespace GradeBook.Views.Shared
                         {
                         new Models.MenuItem("Home", "Index", "Перенос оценок"),
                         new Models.MenuItem("Users", "Index", "Пользователи"),
-                        new Models.MenuItem("Home", "Index", "Группы"),
+                        new Models.MenuItem("Groups", "Index", "Группы"),
                         new Models.MenuItem("Subjects", "Index", "Предметы"),
                         new Models.MenuItem("Teachers", "Index", "Преподаватели")
                         });
