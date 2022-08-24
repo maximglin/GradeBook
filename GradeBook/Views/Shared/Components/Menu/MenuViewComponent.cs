@@ -25,7 +25,7 @@ namespace GradeBook.Views.Shared
                 model.AddRange(
                     new List<Models.MenuItem>()
                     {
-                        new Models.MenuItem("Home", "Privacy", "Проставление оценок")
+                        new Models.MenuItem("Grades", "Index", "Проставление оценок")
                     });
 
 

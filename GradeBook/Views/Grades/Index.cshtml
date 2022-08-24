@@ -1,0 +1,41 @@
+﻿@model Dictionary<int, (List<
+(GradeBook.Storage.Entities.Group Group, string Teacher)
+> Groups, string Name)>
+
+@{
+    ViewData["Title"] = "Проставление оценок";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Предмет</th>
+            <th scope="col">Группа</th>
+            <th scope="col">Преподаватель</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach(var subject in Model.Keys)
+        {
+            <tr>
+                <td rowspan="@Model[subject].Groups.Count">@Model[subject].Name</td>
+                <td>@Model[subject].Groups[0].Group.Name</td>
+                <td>@Model[subject].Groups[0].Teacher</td>
+                <td>Проставить</td>
+            </tr>
+            @for(int i = 1; i < Model[subject].Groups.Count; i++)
+            {
+                <tr>
+                    <td>@Model[subject].Groups[i].Group.Name</td>
+                    <td>@Model[subject].Groups[i].Teacher</td>
+                    <td>Проставить</td>
+                </tr>
+            }
+        }
+        
+
+    </tbody>
+</table>
