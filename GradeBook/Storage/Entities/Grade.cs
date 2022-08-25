@@ -9,11 +9,11 @@ namespace GradeBook.Storage.Entities
     }
     public enum GradeState
     {
-        [Display(Name = "Можно изменять")]
+        [Display(Name = "Можно менять")]
         Unlocked,
-        [Display(Name = "Переставлено в деканат")]
+        [Display(Name = "Переставлено")]
         Set,
-        [Display(Name = "Требует согласования")]
+        [Display(Name = "Требует согл")]
         NeedsApproval
     }
 

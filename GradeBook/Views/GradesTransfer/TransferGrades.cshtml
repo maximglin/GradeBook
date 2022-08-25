@@ -4,6 +4,13 @@
     ViewData["Title"] = "Перенос оценок";
 }
 
+@*<style>
+    select
+    {
+        font-size: 0.7em;
+    }
+</style>*@
+
 <h2>Перенос оценок группы @Model.Group.Name</h2>
 <h2>по предмету @Model.Subject.Name</h2>
 
@@ -25,9 +32,9 @@
             <th scope="col">#</th>
             <th scope="col">Студент</th>
             <th scope="col">М1</th>
-            <th scope="col">Состояние М1</th>
+            @*<th scope="col">Состояние М1</th>*@
             <th scope="col">М2</th>
-            <th scope="col">Состояние М2</th>
+            @*<th scope="col">Состояние М2</th>*@
         </tr>
     </thead>
     <tbody>
@@ -48,72 +55,74 @@
                     {
                         @if(item.M1State == GradeBook.Storage.Entities.GradeState.Unlocked)
                         {
-                            <text><p>@item.M1.Value</p></text>
+                            <text><span>@item.M1.Value</span></text>
                             @Html.HiddenFor(m => Model.Grades[i].M1)
                         }
                         else if(item.M1State == GradeBook.Storage.Entities.GradeState.Set)
                         {
-                                <text><p style="background: yellow">@item.M1.Value</p></text>
+                                <text><span style="background: yellow">@item.M1.Value</span></text>
                         }
                         else
                         {
-                                <text><p style="background: red">@item.M1.Value</p></text>
+                                <text><span style="background: red">@item.M1.Value</span></text>
                         }
                     }
                     else
                     {
-                        <p></p>
+                        <span></span>
                     }
-                </td>
-                <td>
+
+
+                    <br/>
                         @if (item.M1 is not null)
                         {
-                            if(item.M1State == GradeBook.Storage.Entities.GradeState.Unlocked)
+                            if (item.M1State == GradeBook.Storage.Entities.GradeState.Unlocked)
                             {
-                                <select class="myselector" asp-for="Grades[i].M1State" asp-items="@Html.GetEnumSelectList(
+                            <select class="myselector" asp-for="Grades[i].M1State" asp-items="@Html.GetEnumSelectList(
                                 typeof(GradeBook.Storage.Entities.GradeState)
                             )"></select>
                             }
                             else
                             {
-                                <select asp-for="Grades[i].M1State" asp-items="@Html.GetEnumSelectList(
+                            <select asp-for="Grades[i].M1State" asp-items="@Html.GetEnumSelectList(
                                 typeof(GradeBook.Storage.Entities.GradeState)
                             )"></select>
                             }
                         }
-                    </td>
+                </td>
                 <td>@if(item.M2 is not null)
                     {
                         @if(item.M2State == GradeBook.Storage.Entities.GradeState.Unlocked)
                         {
-                            <text><p>@item.M2.Value</p></text>
+                            <text><span>@item.M2.Value</span></text>
                             @Html.HiddenFor(m => Model.Grades[i].M2)
                         }
                         else if(item.M2State == GradeBook.Storage.Entities.GradeState.Set)
                         {
-                             <text><p style="background: yellow">@item.M2.Value</p></text>
+                             <text><span style="background: yellow">@item.M2.Value</span></text>
                         }
                         else
                         {
-                              <text><p style="background: red">@item.M2.Value</p></text>
+                              <text><span style="background: red">@item.M2.Value</span></text>
                         }
                     }
                     else
                     {
-                        <p></p>
-                    }</td>
-                    <td>
+                        <span></span>
+                    }
+
+                    <br/>
                         @if (item.M2 is not null)
                         {
-                            if(item.M2State == GradeBook.Storage.Entities.GradeState.Unlocked)
+                            if (item.M2State == GradeBook.Storage.Entities.GradeState.Unlocked)
                             {
-                                <select class="myselector" asp-for="Grades[i].M2State" asp-items="@Html.GetEnumSelectList(
+                            <select class="myselector" asp-for="Grades[i].M2State" asp-items="@Html.GetEnumSelectList(
                                 typeof(GradeBook.Storage.Entities.GradeState)
                             )"></select>
                             }
                             else
                             {
-                                <select asp-for="Grades[i].M2State" asp-items="@Html.GetEnumSelectList(
+                            <select asp-for="Grades[i].M2State" asp-items="@Html.GetEnumSelectList(
                                 typeof(GradeBook.Storage.Entities.GradeState)
                             )"></select>
                             }
