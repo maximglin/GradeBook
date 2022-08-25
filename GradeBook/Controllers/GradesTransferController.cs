@@ -172,10 +172,18 @@ namespace GradeBook.Controllers
 
 
                 if (grade_to_change_stateM1 is not null && grade.M1State is not null)
+                { 
                     grade_to_change_stateM1.State = grade.M1State.Value;
+                    if (grade.M1 is not null)
+                        grade_to_change_stateM1.Value = grade.M1.Value;
+                }
 
                 if (grade_to_change_stateM2 is not null && grade.M2State is not null)
+                { 
                     grade_to_change_stateM2.State = grade.M2State.Value;
+                    if (grade.M2 is not null)
+                        grade_to_change_stateM2.Value = grade.M2.Value;
+                }
             }
 
             await _context.SaveChangesAsync();

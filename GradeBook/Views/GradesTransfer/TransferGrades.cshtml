@@ -49,6 +49,7 @@
                         @if(item.M1State == GradeBook.Storage.Entities.GradeState.Unlocked)
                         {
                             <text><p>@item.M1.Value</p></text>
+                            @Html.HiddenFor(m => Model.Grades[i].M1)
                         }
                         else if(item.M1State == GradeBook.Storage.Entities.GradeState.Set)
                         {
@@ -86,6 +87,7 @@
                         @if(item.M2State == GradeBook.Storage.Entities.GradeState.Unlocked)
                         {
                             <text><p>@item.M2.Value</p></text>
+                            @Html.HiddenFor(m => Model.Grades[i].M2)
                         }
                         else if(item.M2State == GradeBook.Storage.Entities.GradeState.Set)
                         {
