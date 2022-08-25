@@ -26,44 +26,32 @@ namespace GradeBook.Controllers
             if(user is null) return RedirectToAction("Index", "Home");
 
 
+            var rels = await _context.TeacherSubjectGroupRelations.ToListAsync();
 
-            var model = new Dictionary<int, (List<
-(GradeBook.Storage.Entities.Group Group, string Teacher)
-> Groups, string Name)>();
-            var rels = await _context.TeacherSubjectGroupRelations
-                .OrderBy(r => r.Subject.Name)
-                .ThenBy(r => r.Group.Name)
-                .ToListAsync();
+            var subjects = await _context.Subjects.OrderBy(s => s.Name).ToListAsync();
 
-            if (!user.IsAdmin)
-            {
-                var old = rels;
-                rels = rels.Where(r => user.Teachers.Contains(r.Teacher)).ToList();
-                rels = rels.Concat(old.Where(r => rels.Any(x => x.SubjectId == r.SubjectId
-                && x.GroupId == r.GroupId))).Distinct().ToList();
-            }
-
+            Dictionary<int, (List<(GradeBook.Storage.Entities.Group Group, string Teacher)> Groups, string Name)> dic;
+                
             
-
-            foreach(var g in rels.GroupBy(r => r.SubjectId))
+            if(user.IsAdmin)
             {
-                if (g.Count() == 0) continue;
-
-                model.Add(g.Key, (new List<(Group Group, string Teacher)>(), g.First().Subject.Name));
-                foreach (var val in g.GroupBy(x => x.GroupId))
-                {
-                    string teachers = "";
-                    foreach(var v2 in val)
-                    {
-                        teachers += (teachers == "" ? "" : ", ") + v2.Teacher.Name;
-                    }
-                    model[g.Key].Groups.Add((val.First().Group, teachers));
-                }
+                dic = subjects.ToDictionary(s => s.Id, s => (s.Groups.OrderBy(g => g.Name).Select(g => (g,
+                string.Join(", ", rels.Where(r => r.SubjectId == s.Id && r.GroupId == g.Id).Select(r => r.Teacher.Name))
+                )).ToList(), s.Name));
+            }
+            else
+            {
+                dic = subjects.Where(s => rels.Any(r => r.SubjectId == s.Id && user.Teachers.Contains(r.Teacher) && s.Groups.Contains(r.Group)))
+                    .ToDictionary(s => s.Id, s => (s.Groups
+                    .Where(g => rels.Any(r => r.SubjectId == s.Id && user.Teachers.Contains(r.Teacher) && r.GroupId == g.Id))
+                    .OrderBy(g => g.Name).Select(g => (g,
+                string.Join(", ", rels.Where(r => r.SubjectId == s.Id && r.GroupId == g.Id).Select(r => r.Teacher.Name))
+                )).ToList(), s.Name));
             }
             
 
 
-            return View(model);
+            return View(dic);
         }
 
         [HttpGet]

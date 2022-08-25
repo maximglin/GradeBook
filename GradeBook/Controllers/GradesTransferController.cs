@@ -29,58 +29,36 @@ namespace GradeBook.Controllers
 
 
 
-            var model = new Dictionary<int, (List<
-(GradeBook.Storage.Entities.Group Group, string Teacher)
-> Groups, Subject Subject)>();
-            var model2 = new Dictionary<int, (List<
-(GradeBook.Storage.Entities.Group Group, string Teacher)
-> Groups, Subject Subject)>();
-            var rels = await _context.TeacherSubjectGroupRelations
-                .OrderBy(r => r.Subject.Name)
-                .ThenBy(r => r.Group.Name)
-                .ToListAsync();
+            var rels = await _context.TeacherSubjectGroupRelations.ToListAsync();
 
-            if (!user.IsAdmin)
-            {
-                var old = rels;
-                rels = rels.Where(r => user.Teachers.Contains(r.Teacher)).ToList();
-                rels = rels.Concat(old.Where(r => rels.Any(x => x.SubjectId == r.SubjectId
-                && x.GroupId == r.GroupId))).Distinct().ToList();
-            }
+            var subjects = await _context.Subjects.OrderBy(s => s.Name).ToListAsync();
 
             var grades = await _context.Grades.ToListAsync();
 
-            foreach (var g in rels.GroupBy(r => r.SubjectId))
-            {
-                if (g.Count() == 0) continue;
+            Dictionary<int, (List<(GradeBook.Storage.Entities.Group Group, string Teacher)> Groups, Subject Subject)> dic1, dic2;
 
-                model.Add(g.Key, (new List<(Group Group, string Teacher)>(), g.First().Subject));
-                model2.Add(g.Key, (new List<(Group Group, string Teacher)>(), g.First().Subject));
-                foreach (var val in g.GroupBy(x => x.GroupId))
-                {
-                    string teachers = "";
-                    foreach (var v2 in val)
-                    {
-                        teachers += (teachers == "" ? "" : ", ") + v2.Teacher.Name;
-                    }
-
-                    if(grades.Any(g => val.First().Group.Students.Contains(g.Student) &&
-                        g.Subject == val.First().Subject &&
-                        (g.State == GradeState.Unlocked || g.State == GradeState.NeedsApproval)
-                    ))
-                        model[g.Key].Groups.Add((val.First().Group, teachers));
-                    else
-                        model2[g.Key].Groups.Add((val.First().Group, teachers));
-                }
-            }
+            dic1 = subjects.Where(s => grades.Any(g => g.SubjectId == s.Id && (g.State == GradeState.Unlocked || g.State == GradeState.NeedsApproval)))
+                .ToDictionary(s => s.Id, s => (s.Groups.OrderBy(g => g.Name)
+                .Where(group => grades.Any(g => g.SubjectId == s.Id && group.Students.Contains(g.Student) && (g.State == GradeState.Unlocked || g.State == GradeState.NeedsApproval)))
+                .Select(g => (g,
+            string.Join(", ", rels.Where(r => r.SubjectId == s.Id && r.GroupId == g.Id).Select(r => r.Teacher.Name))
+            )).ToList(), s));
 
 
+            dic2 = subjects.Where(s => s.Groups.Any(group => grades.Where(g => g.SubjectId == s.Id && group.Students.Contains(g.Student)).All(g => g.State == GradeState.Set)))
+                .ToDictionary(s => s.Id, s => (s.Groups.OrderBy(g => g.Name)
+                .Where(group => grades.Where(g => g.SubjectId == s.Id && group.Students.Contains(g.Student)).All(g => g.State == GradeState.Set))
+                .Select(g => (g,
+            string.Join(", ", rels.Where(r => r.SubjectId == s.Id && r.GroupId == g.Id).Select(r => r.Teacher.Name))
+            )).ToList(), s));
+
+            
 
 
             return View(new GradesTransferViewModel()
             {
-                Item1 = model,
-                Item2 = model2
+                Item1 = dic1,
+                Item2 = dic2
             });
         }
 
