@@ -34,7 +34,7 @@ namespace GradeBook.Views.Shared
                     model.AddRange(
                         new List<Models.MenuItem>()
                         {
-                        new Models.MenuItem("Home", "Index", "Перенос оценок"),
+                        new Models.MenuItem("GradesTransfer", "Index", "Перенос оценок"),
                         new Models.MenuItem("Users", "Index", "Пользователи"),
                         new Models.MenuItem("Groups", "Index", "Группы"),
                         new Models.MenuItem("Subjects", "Index", "Предметы"),

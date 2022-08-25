@@ -93,6 +93,7 @@ namespace GradeBook
                     Student = st2,
                     Subject = bd,
                     Type = Storage.Entities.GradeType.M2,
+                    State = Storage.Entities.GradeState.Set,
                     Value = 48
                 });
                 context.Grades.Add(new Storage.Entities.Grade()
@@ -106,7 +107,7 @@ namespace GradeBook
                 {
                     Student = st4,
                     Subject = bd,
-                    Type = Storage.Entities.GradeType.M1,
+                    Type = Storage.Entities.GradeType.M2,
                     State = Storage.Entities.GradeState.NeedsApproval,
                     Value = 42
                 });

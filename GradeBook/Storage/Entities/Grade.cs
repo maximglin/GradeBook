@@ -1,4 +1,6 @@
-﻿namespace GradeBook.Storage.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GradeBook.Storage.Entities
 {
     public enum GradeType
     {
@@ -7,8 +9,11 @@
     }
     public enum GradeState
     {
+        [Display(Name = "Можно изменять")]
         Unlocked,
+        [Display(Name = "Переставлено в деканат")]
         Set,
+        [Display(Name = "Требует согласования")]
         NeedsApproval
     }
 

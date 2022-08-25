@@ -1,0 +1,92 @@
+﻿@model GradeBook.Models.GradesTransferViewModel
+
+@{
+    ViewData["Title"] = "Проставление оценок";
+}
+
+<h2>Есть непереставленные или несогласованные оценки:</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Предмет</th>
+            <th scope="col">Группа</th>
+            <th scope="col">Преподаватель</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach(var subject in Model.Item1.Keys)
+        {
+            if(Model.Item1[subject].Groups.Count > 0)
+            {
+                <tr>
+                <td rowspan="@Model.Item1[subject].Groups.Count">@Model.Item1[subject].Subject.Name</td>
+                <td>@Model.Item1[subject].Groups[0].Group.Name</td>
+                <td>@Model.Item1[subject].Groups[0].Teacher</td>
+                <td>@Html.ActionLink("К оценкам", "TransferGrades", "GradesTransfer", 
+                    new {subjectId = subject, groupId = Model.Item1[subject].Groups[0].Group.Id},
+                    new {@class = "btn btn-primary"})</td>
+            </tr>
+            @for(int i = 1; i < Model.Item1[subject].Groups.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Item1[subject].Groups[i].Group.Name</td>
+                    <td>@Model.Item1[subject].Groups[i].Teacher</td>
+                    <td>@Html.ActionLink("К оценкам", "TransferGrades", "GradesTransfer", 
+                    new {subjectId = subject, groupId = Model.Item1[subject].Groups[i].Group.Id},
+                    new {@class = "btn btn-primary"})</td>
+                </tr>
+            }
+            }
+        }
+            
+        
+
+    </tbody>
+</table>
+
+
+<h2>Остальные:</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Предмет</th>
+            <th scope="col">Группа</th>
+            <th scope="col">Преподаватель</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach(var subject in Model.Item2.Keys)
+        {
+            if(Model.Item2[subject].Groups.Count > 0)
+            {
+                <tr>
+                <td rowspan="@Model.Item2[subject].Groups.Count">@Model.Item2[subject].Subject.Name</td>
+                <td>@Model.Item2[subject].Groups[0].Group.Name</td>
+                <td>@Model.Item2[subject].Groups[0].Teacher</td>
+                <td>@Html.ActionLink("К оценкам", "TransferGrades", "GradesTransfer",
+                    new {subjectId = subject, groupId = Model.Item2[subject].Groups[0].Group.Id},
+                    new {@class = "btn btn-primary"})</td>
+            </tr>
+            @for(int i = 1; i < Model.Item2[subject].Groups.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Item2[subject].Groups[i].Group.Name</td>
+                    <td>@Model.Item2[subject].Groups[i].Teacher</td>
+                    <td>@Html.ActionLink("К оценкам", "TransferGrades", "GradesTransfer",
+                    new {subjectId = subject, groupId = Model.Item2[subject].Groups[i].Group.Id},
+                    new {@class = "btn btn-primary"})</td>
+                </tr>
+            }
+            }
+            
+        }
+        
+
+    </tbody>
+</table>
