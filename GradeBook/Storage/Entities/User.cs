@@ -17,5 +17,7 @@ namespace GradeBook.Storage.Entities
         public bool IsAdmin { get; set; } = false;
 
         public virtual List<Teacher> Teachers { get; set; } = new();
+
+        public bool FirstLogin { get; set; } = true;
     }
 }

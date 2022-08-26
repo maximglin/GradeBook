@@ -46,6 +46,7 @@ namespace GradeBook.Controllers
                 user.Login is not null && user.Login.Length > 1 &&
                 user.Password.Length > 1 && !_context.Users.Any(u => u.Login == user.Login))
             {
+                user.FirstLogin = true;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
             }
