@@ -1,6 +1,20 @@
 ﻿@model GradeBook.Models.UserCredentials
 <form asp-action="LogIn" asp-controller="Home" asp-antiforgery="true">
-    <input type="text" asp-for="Login"/>
-    <input type="password" asp-for="Password"/>
-    <input type="submit" value="Войти" class="btn btn-primary" />
+    
+    <div style="display: inline-block;">
+        <div>
+            <input type="text" asp-for="Login" style="vertical-align: bottom;"/>
+            <input type="password" asp-for="Password" style="vertical-align: bottom;"/>
+            <input type="submit" value="Войти" class="btn btn-primary" 
+            style=" display: inline-block;
+                    vertical-align: bottom;
+                    font-size: 0.7em;" />
+        </div>
+        <div style="height: 0.65em">
+            @Html.ActionLink("Смена пароля", "ChangePassword", "Home", null, 
+            new {style="font-size: 0.6em; position: absolute;"})
+        </div>
+            
+
+    </div> 
 </form>

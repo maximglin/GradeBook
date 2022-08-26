@@ -4,7 +4,9 @@
     <td>@Html.EditorFor(u => u.Login)</td>
     <td>@Html.EditorFor(u => u.Password)</td>
     <td>
-        @Html.EditorFor(u => u.IsAdmin)
+        <select asp-for="Role" asp-items="@Html.GetEnumSelectList(
+                                typeof(GradeBook.Storage.Entities.UserRole)
+                            )"></select>
     </td>
     <td>
         -

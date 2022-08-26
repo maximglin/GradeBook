@@ -25,7 +25,7 @@ namespace GradeBook.Controllers
 
         private async Task<List<User>> GetModel()
         {
-            return await _context.Users.OrderByDescending(u => u.IsAdmin).ThenBy(u => u.Login).ToListAsync();
+            return await _context.Users.OrderByDescending(u => u.Role).ThenBy(u => u.Login).ToListAsync();
         }
 
         public async Task<IActionResult> Remove(int id)

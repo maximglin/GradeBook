@@ -32,8 +32,15 @@
                 else
                 {
                     <div>
-                        Вы вошли как <b>@User.Identity.Name</b>
-                        @Html.ActionLink("Выход", "LogOut", "Home", null, new {@class = "btn btn-primary"})
+                        <div>
+                            Вы вошли как <b>@User.Identity.Name</b>
+                            @Html.ActionLink("Выход", "LogOut", "Home", null, new {@class = "btn btn-primary",
+                            style = "font-size: 0.7em;"})
+                        </div>
+                        <div style="height: 0.65em">
+                            @Html.ActionLink("Смена пароля", "ChangePassword", "Home", null, 
+                            new {style="font-size: 0.6em; position: absolute;"})
+                        </div>
                     </div>
                 }
 

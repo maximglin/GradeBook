@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GradeBook.Controllers
 {
 
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrGradeTransfer")]
     public class GradesTransferController : Controller
     {
 

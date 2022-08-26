@@ -17,7 +17,7 @@ namespace GradeBook.Views.Shared
         {
             var model = new List<Models.MenuItem>()
             {
-                new Models.MenuItem("Home", "Index", "Главная"),
+                //new Models.MenuItem("Home", "Index", "Главная"),
             };
 
             if(User.Identity is not null && User.Identity.IsAuthenticated)
@@ -29,12 +29,19 @@ namespace GradeBook.Views.Shared
                     });
 
 
-                if (_context.Users.FirstOrDefault(u => u.Login == User.Identity.Name)?.IsAdmin ?? false)
+                var user = _context.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
+                if (user?.IsAdminOrGradeTransfer ?? false)
+                    model.AddRange(
+                         new List<Models.MenuItem>()
+                         {
+                            new Models.MenuItem("GradesTransfer", "Index", "Перенос оценок")
+                         });
+
+                if (user?.IsAdmin ?? false)
                 {
                     model.AddRange(
                         new List<Models.MenuItem>()
                         {
-                        new Models.MenuItem("GradesTransfer", "Index", "Перенос оценок"),
                         new Models.MenuItem("Users", "Index", "Пользователи"),
                         new Models.MenuItem("Groups", "Index", "Группы"),
                         new Models.MenuItem("Subjects", "Index", "Предметы"),

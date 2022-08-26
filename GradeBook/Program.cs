@@ -17,14 +17,20 @@ namespace GradeBook
                 {
                     Login = "admin",
                     Password = "a1234",
-                    IsAdmin = true
+                    Role = Storage.Entities.UserRole.Admin
+                });
+                context.Users.Add(new Storage.Entities.User()
+                {
+                    Login = "sasha",
+                    Password = "1234",
+                    Role = Storage.Entities.UserRole.GradeTransfer
                 });
 
                 var maximglin = new Storage.Entities.User()
                 {
                     Login = "maximglin",
                     Password = "1234",
-                    IsAdmin = false
+                    Role = Storage.Entities.UserRole.User
                 };
                 context.Users.Add(maximglin);
 
@@ -133,11 +139,16 @@ namespace GradeBook
 
 
             builder.Services.AddSingleton<IAuthorizationHandler, AdminHandler>();
+            builder.Services.AddSingleton<IAuthorizationHandler, AdminOrGradeTransferHandler>();
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy =>
                 {
                     policy.AddRequirements(new Models.AdminRequirement());
+                });
+                options.AddPolicy("AdminOrGradeTransfer", policy =>
+                {
+                    policy.AddRequirements(new Models.AdminOrGradeTransferRequirement());
                 });
             });
 

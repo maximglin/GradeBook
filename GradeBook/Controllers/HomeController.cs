@@ -19,14 +19,36 @@ namespace GradeBook.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (User.Identity is not null && User.Identity.IsAuthenticated)
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+                if(user is not null)
+                {
+                    if (user.IsAdminOrGradeTransfer)
+                        return RedirectToAction("Index", "GradesTransfer");
+                    else
+                        return RedirectToAction("Index", "Grades");
+                }
+                else
+                {
+                    await HttpContext.SignOutAsync();
+                }
+            }
+                
+
             return View();
         }
         [HttpGet]
         public async Task<IActionResult> ChangePassword(string login = "", bool firstLogin = false)
         {
-            await HttpContext.SignOutAsync();
+            if (User.Identity is not null && User.Identity.IsAuthenticated)
+            { 
+                await HttpContext.SignOutAsync();
+                return RedirectToAction("ChangePassword", new { login = login, firstLogin = firstLogin });
+            }
+
             return View("ChangePassword", new ChangePasswordViewModel()
             {
                 Login = login,
@@ -62,8 +84,8 @@ namespace GradeBook.Controllers
                 u.Password == user.Password);
             if (us is not null)
             {
-                if (us.FirstLogin)
-                    return RedirectToAction("ChangePassword", new {login = us.Login, firstLogin = true});
+                //if (us.FirstLogin)
+                //    return RedirectToAction("ChangePassword", new {login = us.Login, firstLogin = true});
 
                 await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
@@ -77,6 +99,9 @@ namespace GradeBook.Controllers
 
             
             var referer = Request.Headers["referer"];
+            if (referer.Any(r => r.Contains("ChangePassword")))
+                return RedirectToAction("Index");
+
             return Redirect(referer);
         }
 
