@@ -54,6 +54,17 @@ namespace GradeBook.Controllers
             return View(dic);
         }
 
+
+        private async Task<bool> IsPageBlocked(int subjectId, int groupId)
+        {
+            var block = await _context.BlockedPages.FirstOrDefaultAsync(b => b.SubjectId == subjectId && b.GroupId == groupId);
+            
+            if (block is null) return false;
+
+            if (DateTime.UtcNow - block.TimeStamp > TimeSpan.FromMinutes(2)) return false;
+
+            return true;
+        }
         [HttpGet]
         public async Task<IActionResult> SetGrades(int subjectId, int groupId)
         {
@@ -82,7 +93,15 @@ namespace GradeBook.Controllers
             var subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == subjectId);
             var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
 
+
             if(subject is null || group is null) return RedirectToAction("Index");
+
+            if(await IsPageBlocked(subjectId, groupId))
+            {
+                if(!user.IsAdmin)
+                    return RedirectToAction("Index"); //error page is watched by transfer
+            }
+                
 
 
             var model = new GradesViewModel();
@@ -134,6 +153,8 @@ namespace GradeBook.Controllers
             var subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == model.Subject.Id);
             var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == model.Group.Id);
             if(subject is null || group is null) return RedirectToAction("Index");
+
+            if (await IsPageBlocked(subject.Id, group.Id)) return RedirectToAction("Index"); //error page is watched by transfer
 
             if (!user.IsAdmin)
             {

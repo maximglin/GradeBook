@@ -15,6 +15,8 @@ namespace GradeBook.Storage
     
         public DbSet<User> Users { get; set; }
 
+        public DbSet<BlockedPage> BlockedPages { get; set; }
+
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         public int SaveChanges();
     }
@@ -27,6 +29,8 @@ namespace GradeBook.Storage
         public DbSet<Subject> Subjects { get; set; } = null!;
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<TeacherSubjectGroup> TeacherSubjectGroupRelations { get; set; } = null!;
+
+        public DbSet<BlockedPage> BlockedPages { get; set; } = null;
 
         public DbSet<User> Users { get; set; } = null!;
 
@@ -53,6 +57,11 @@ namespace GradeBook.Storage
                 g.Type,
                 g.StudentId,
                 g.SubjectId
+            }).IsUnique(true);
+            modelBuilder.Entity<BlockedPage>().HasIndex(p => new
+            {
+                p.SubjectId,
+                p.GroupId
             }).IsUnique(true);
 
             base.OnModelCreating(modelBuilder);

@@ -62,7 +62,23 @@ namespace GradeBook.Controllers
             });
         }
 
+        private async Task BlockPage(Subject subject, Group group)
+        {
+            if (subject is null || group is null) return;
 
+            var block = await _context.BlockedPages.FirstOrDefaultAsync(b => b.SubjectId == subject.Id && b.GroupId == group.Id);
+            if (block is null)
+                _context.BlockedPages.Add(new BlockedPage()
+                {
+                    Subject = subject,
+                    Group = group,
+                    TimeStamp = DateTime.UtcNow
+                });
+            else
+                block.TimeStamp = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+        }
         [HttpGet]
         public async Task<IActionResult> TransferGrades(int subjectId, int groupId)
         {
@@ -93,6 +109,7 @@ namespace GradeBook.Controllers
 
             if (subject is null || group is null) return RedirectToAction("Index");
 
+            await BlockPage(subject, group);
 
             var model = new GradesViewModel();
 

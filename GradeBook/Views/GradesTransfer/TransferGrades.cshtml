@@ -2,14 +2,35 @@
 
 @{
     ViewData["Title"] = "Перенос оценок";
+    string link_for_fetch = Url.ActionLink("BlockGradePage", "Block", new { subjectId = Model.Subject.Id, groupId = Model.Group.Id })!;
+    string link_for_stop_fetching = Url.ActionLink("Index", "Home")!;
 }
 
-@*<style>
-    select
-    {
-        font-size: 0.7em;
-    }
-</style>*@
+<script>
+    const seconds = 30;
+    const stopwhen = 600;
+    let count = 0;
+    let link = "@link_for_fetch";
+    link = link.replace("amp;", "");
+    let link_for_stop = "@link_for_stop_fetching";
+    link_for_stop = link_for_stop.replace("amp;", "");
+    let stop = false;
+    
+
+    let timer = setInterval(async function () {
+        if (!stop) {
+            let res = await fetch(
+                link
+            );
+            if (count * seconds >= stopwhen) {
+                stop = true;
+                clearInterval(timer);
+                window.location.replace(link_for_stop);
+            }
+            count++;
+        }
+    }, seconds * 1000);
+</script>
 
 <h2>Перенос оценок группы @Model.Group.Name</h2>
 <h2>по предмету @Model.Subject.Name</h2>
